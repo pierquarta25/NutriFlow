@@ -70,16 +70,15 @@ export default function PaginaAlimenti() {
     impostaRisultatiOff([]);
 
     try {
-      // Facciamo una chiamata fetch diretta all'endpoint dell'Edge Function
-
-      const projectRef = 'oowopbugjepysflusshm';
-      const response = await fetch(
-        `https://${projectRef}.supabase.co/functions/v1/importa-alimenti?query=${encodeURIComponent(cercaOff.trim())}`
+      // Facciamo una chiamata protetta all'Edge Function tramite il client Supabase
+      const { data, error } = await supabase.functions.invoke(
+        `importa-alimenti?query=${encodeURIComponent(cercaOff.trim())}`
       );
-      const resData = await response.json();
 
-      if (resData && resData.success) {
-        impostaRisultatiOff(resData.data || []);
+      if (error) throw error;
+
+      if (data && data.success) {
+        impostaRisultatiOff(data.data || []);
       } else {
         alert("Nessun alimento trovato online.");
       }

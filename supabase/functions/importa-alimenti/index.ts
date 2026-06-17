@@ -1,9 +1,20 @@
 // Edge Function: importa-alimenti
 // Consente di cercare e importare alimenti da Open Food Facts API in italiano.
+// Include la gestione delle intestazioni CORS per consentire l'accesso da browser (Next.js).
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+}
+
 serve(async (req) => {
+  // Gestione preflight CORS (richiesta OPTIONS inviata dal browser)
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders })
+  }
+
   try {
     const url = new URL(req.url)
     const query = url.searchParams.get("query") || "pasta"
@@ -31,12 +42,12 @@ serve(async (req) => {
 
     return new Response(
       JSON.stringify({ success: true, data: alimenti }),
-      { headers: { "Content-Type": "application/json" } }
+      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     )
   } catch (error: any) {
     return new Response(
       JSON.stringify({ success: false, error: error.message }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     )
   }
 })
