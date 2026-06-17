@@ -54,9 +54,9 @@ export async function middleware(richiesta: NextRequest) {
     return NextResponse.redirect(new URL('/login', richiesta.url));
   }
 
-  // Se l'utente è già loggato e prova ad andare sul login/registrazione, lo rimando alla dashboard
-  if (user && isSchermataAuth) {
-    return NextResponse.redirect(new URL('/', richiesta.url));
+  // Se l'utente è già loggato e prova ad andare su pagine pubbliche o auth, lo mando alla dashboard
+  if (user && (isSchermataAuth || percorsoRichiesto === '/')) {
+    return NextResponse.redirect(new URL('/dashboard', richiesta.url));
   }
 
   return rispostaNext;

@@ -1,6 +1,5 @@
-// Pagina principale della Dashboard (Panoramica).
-// Mostra un colpo d'occhio sulle statistiche dei clienti, gli appuntamenti del giorno
-// e un grafico con l'andamento delle nuove iscrizioni negli ultimi mesi.
+// Pagina principale della Dashboard (Panoramica) posizionata su /dashboard.
+// Mostra statistiche, appuntamenti del giorno e grafico iscrizioni.
 
 'use client';
 
@@ -22,21 +21,20 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { supabase } from '../../lib/supabase/client';
+import { supabase } from '../../../lib/supabase/client';
 import { Card } from '@nutriflow/ui';
 
-export default function PaginaPanoramica() {
+export default function PaginaPanoramicaDashboard() {
   const [statistiche, impostaStatistiche] = useState({
     clientiAttivi: 0,
     appuntamentiOggi: 0,
-    pianiInScadenza: 2, // Valore simulato per la v1
-    questionariNonLetti: 1, // Valore simulato per la v1
+    pianiInScadenza: 2,
+    questionariNonLetti: 1,
   });
 
   const [ultimiClienti, impostaUltimiClienti] = useState<any[]>([]);
   const [appuntamentiGiorno, impostaAppuntamentiGiorno] = useState<any[]>([]);
 
-  // Dati per il grafico dell'andamento clienti acquisiti negli ultimi 6 mesi
   const datiGraficoIscrizioni = [
     { mese: 'Gen', clienti: 4 },
     { mese: 'Feb', clienti: 6 },
@@ -51,13 +49,13 @@ export default function PaginaPanoramica() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // 1. Recupero il numero totale di clienti attivi
+      // 1. Conteggio clienti
       const { count: conteggioClienti } = await supabase
         .from('clients')
         .select('*', { count: 'exact', head: true })
         .eq('nutritionist_id', user.id);
 
-      // 2. Recupero il numero di appuntamenti di oggi
+      // 2. Conteggio appuntamenti
       const oggi = new Date().toISOString().split('T')[0] || '';
       const { count: conteggioAppuntamenti } = await supabase
         .from('appointments')
@@ -73,7 +71,7 @@ export default function PaginaPanoramica() {
         questionariNonLetti: 1,
       });
 
-      // 3. Carico gli ultimi 5 clienti modificati per la lista a destra
+      // 3. Ultimi 5 clienti
       const { data: clientiCaricati } = await supabase
         .from('clients')
         .select('id, profiles (full_name, email)')
@@ -84,7 +82,7 @@ export default function PaginaPanoramica() {
         impostaUltimiClienti(clientiCaricati);
       }
 
-      // 4. Carico gli appuntamenti della giornata
+      // 4. Appuntamenti
       const { data: appuntamentiCaricati } = await supabase
         .from('appointments')
         .select('id, data_ora, tipo, profiles!client_id (full_name)')
@@ -103,7 +101,6 @@ export default function PaginaPanoramica() {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Intestazione */}
       <div>
         <h2 className="text-2xl font-bold text-[#111827]">Panoramica Giornaliera</h2>
         <p className="text-sm text-[#6B7280]">
@@ -111,9 +108,8 @@ export default function PaginaPanoramica() {
         </p>
       </div>
 
-      {/* Grid delle Statistiche in Cima (4 Card) */}
+      {/* Grid delle Statistiche */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {/* Card 1: Clienti Attivi */}
         <Card paddingInterno={24} className="flex items-center gap-4">
           <div className="p-3 bg-[#DCFCE7] text-[#16A34A] rounded-xl">
             <Users size={24} />
@@ -124,7 +120,6 @@ export default function PaginaPanoramica() {
           </div>
         </Card>
 
-        {/* Card 2: Appuntamenti Oggi */}
         <Card paddingInterno={24} className="flex items-center gap-4">
           <div className="p-3 bg-[#DBEAFE] text-[#3B82F6] rounded-xl">
             <CalendarIcon size={24} />
@@ -135,7 +130,6 @@ export default function PaginaPanoramica() {
           </div>
         </Card>
 
-        {/* Card 3: Piani in Scadenza */}
         <Card paddingInterno={24} className="flex items-center gap-4">
           <div className="p-3 bg-[#FEF3C7] text-[#F59E0B] rounded-xl">
             <AlertCircle size={24} />
@@ -146,7 +140,6 @@ export default function PaginaPanoramica() {
           </div>
         </Card>
 
-        {/* Card 4: Questionari da Leggere */}
         <Card paddingInterno={24} className="flex items-center gap-4">
           <div className="p-3 bg-[#FEE2E2] text-[#EF4444] rounded-xl">
             <FileText size={24} />
@@ -158,9 +151,8 @@ export default function PaginaPanoramica() {
         </Card>
       </div>
 
-      {/* Sezione Centrale (Appuntamenti e Ultimi Clienti) */}
+      {/* Colonne Appuntamenti e Clienti */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Colonna Sinistra: Appuntamenti del Giorno */}
         <Card paddingInterno={24} className="flex flex-col gap-4">
           <h3 className="text-lg font-bold text-[#111827]">Appuntamenti del Giorno</h3>
           <div className="flex flex-col gap-3">
@@ -195,7 +187,6 @@ export default function PaginaPanoramica() {
           </div>
         </Card>
 
-        {/* Colonna Destra: Ultimi Clienti */}
         <Card paddingInterno={24} className="flex flex-col gap-4">
           <h3 className="text-lg font-bold text-[#111827]">Ultimi Clienti Aggiunti</h3>
           <div className="flex flex-col gap-3">
@@ -226,7 +217,7 @@ export default function PaginaPanoramica() {
         </Card>
       </div>
 
-      {/* Sezione Inferiore: Grafico Acquisizione Clienti */}
+      {/* Grafico */}
       <Card paddingInterno={24} className="flex flex-col gap-4">
         <div>
           <h3 className="text-lg font-bold text-[#111827]">Andamento Iscrizioni Clienti</h3>
