@@ -1,100 +1,71 @@
-import Image from "next/image";
+// Landing page pubblica di NutriFlow.
+// Mostra una pagina di presentazione minimale e professionale
+// con i pulsanti per accedere o registrarsi alla piattaforma.
 
-export default function Home() {
+import React from 'react';
+import Link from 'next/link';
+
+export default function PaginaInizialePubblica() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="min-h-screen bg-[#F9FAFB] flex flex-col justify-between">
+      {/* Intestazione / Navbar */}
+      <header className="px-8 py-6 flex justify-between items-center bg-white border-b border-[#E5E7EB]">
+        <span className="text-xl font-bold text-[#16A34A] tracking-wider">
+          NutriFlow
+        </span>
+        <div className="flex gap-4">
+          <Link
+            href="/login"
+            className="text-sm font-semibold text-[#6B7280] hover:text-[#111827] px-4 py-2 transition-colors"
+          >
+            Accedi
+          </Link>
+          <Link
+            href="/login"
+            className="text-sm font-bold text-white bg-[#16A34A] hover:bg-[#15803d] px-5 py-2 rounded-full transition-colors"
+          >
+            Inizia Ora
+          </Link>
+        </div>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
+      {/* Contenuto Principale (Hero Section) */}
+      <main className="flex-1 flex flex-col items-center justify-center text-center px-6 max-w-3xl mx-auto py-12 gap-6">
+        <span className="text-xs font-bold uppercase tracking-widest text-[#16A34A] bg-[#DCFCE7] px-3.5 py-1.5 rounded-full">
+          NutriFlow SaaS
+        </span>
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-[#111827] leading-tight">
+          La nutrizione sportiva, resa semplice e professionale.
+        </h1>
+        <p className="text-lg text-[#6B7280] max-w-xl">
+          Crea piani alimentari personalizzati, traccia i progressi dei clienti
+          in tempo reale e ottimizza il lavoro del tuo studio nutrizionale.
+        </p>
+
+        {/* Pulsanti di Azione */}
+        <div className="flex gap-4 mt-4">
+          <Link
+            href="/login"
+            className="inline-flex h-12 items-center justify-center rounded-full bg-[#16A34A] px-8 text-sm font-bold text-white hover:bg-[#15803d] transition-colors shadow-lg hover:shadow-xl"
+          >
+            Accedi alla Dashboard
+          </Link>
           <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            href="https://github.com/pierquarta25/NutriFlow"
             target="_blank"
             rel="noopener noreferrer"
+            className="inline-flex h-12 items-center justify-center rounded-full border border-[#E5E7EB] bg-white px-8 text-sm font-bold text-[#111827] hover:bg-[#F9FAFB] transition-colors"
           >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
+            Codice Sorgente
           </a>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Piè di pagina */}
+      <footer className="py-6 border-t border-[#E5E7EB] text-center bg-white">
+        <p className="text-xs text-[#9CA3AF]">
+          © {new Date().getFullYear()} NutriFlow. Tutti i diritti riservati.
+        </p>
       </footer>
     </div>
   );
