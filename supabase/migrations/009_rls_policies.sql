@@ -16,15 +16,24 @@ CREATE POLICY "Permetti aggiornamento profilo proprio"
   ON public.profiles FOR UPDATE
   USING (auth.uid() = id);
 
--- Permetto al nutrizionista di vedere i profili di tutti i clienti
-CREATE POLICY "Permetti ai nutrizionisti di leggere i profili client"
+-- Permetto al nutrizionista di vedere i profili dei propri clienti
+CREATE POLICY "Permetti ai nutrizionisti di leggere i profili dei propri clienti"
   ON public.profiles FOR SELECT
   USING (
-    EXISTS (
-      SELECT 1 FROM public.profiles
-      WHERE id = auth.uid() AND role = 'nutritionist'
+    id IN (
+      SELECT id FROM public.clients WHERE nutritionist_id = auth.uid()
     )
   );
+
+-- Permetto al cliente di vedere il profilo del proprio nutrizionista
+CREATE POLICY "Permetti ai clienti di leggere il profilo del proprio nutrizionista"
+  ON public.profiles FOR SELECT
+  USING (
+    id IN (
+      SELECT nutritionist_id FROM public.clients WHERE id = auth.uid()
+    )
+  );
+
 
 -- =========================================================================
 -- POLITICHE PER public.clients
